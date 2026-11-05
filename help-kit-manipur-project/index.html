@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Help Kit Manipur</title>
+<meta name="theme-color" content="#1a4530">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<header>
+  <div class="header-top">
+    <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open menu">☰</button>
+    <div class="brand">
+      <span class="brand-logo">🧭</span>
+      <div class="brand-text">
+        <h1>Help Kit Manipur</h1>
+        <span class="brand-sub">Tours &amp; Travels</span>
+      </div>
+    </div>
+    <div class="loc-indicator" id="locIndicator">Location not set</div>
+  </div>
+</header>
+
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<nav class="drawer" id="drawerMenu">
+  <div class="drawer-head">
+    <span class="brand-logo">🧭</span>
+    <div>
+      <h2>Help Kit Manipur</h2>
+      <span class="brand-sub">Menu</span>
+    </div>
+  </div>
+  <div class="drawer-item active" data-target="tabExplore" id="navExplore">📍 Explore nearby</div>
+  <div class="drawer-item" data-target="tabPlan" id="navPlan">🗺️ Trip planner</div>
+  <div class="drawer-item" data-target="tabBus" id="navBus">🚌 Bus routes</div>
+  <div class="drawer-item" data-target="tabFlights" id="navFlights">✈️ Flights</div>
+  <div class="drawer-item" data-target="tabReviews" id="navReviews">⚠️ Reviews &amp; safety</div>
+  <div class="drawer-item" data-target="tabSafety" id="navSafety">🛡️ Safety Guide (after dark)</div>
+  <div class="drawer-item" data-target="tabVisitor" id="navVisitor">🧳 Visitor info &amp; permits</div>
+  <div class="drawer-item" data-target="tabBusiness" id="navBusiness">🤝 List your business</div>
+  <div class="drawer-footer">Free, open guide — no account needed to read.</div>
+</nav>
+
+<div class="wrap">
+
+<!-- ===================== EXPLORE TAB ===================== -->
+<div id="tabExplore">
+
+  <div class="panel">
+    <div class="loc-row">
+      <button class="btn btn-primary" id="locBtn">📍 Use my location</button>
+      <button class="btn btn-ghost" id="customLocBtn">🖊️ Enter location manually</button>
+      <span id="locStatus">Turn location on to see how far each place is from you.</span>
+    </div>
+
+    <div class="custom-loc" id="customLocPanel">
+      <div class="coord-row">
+        <input type="number" step="any" id="latInput" placeholder="Latitude e.g. 24.8075">
+        <input type="number" step="any" id="lngInput" placeholder="Longitude e.g. 93.9428">
+        <button class="btn btn-primary" id="applyCoordBtn">Set</button>
+      </div>
+      <div class="coord-help">
+        Don't know the coordinates? Open
+        <a href="https://www.google.com/maps" target="_blank" rel="noopener">Google Maps</a>,
+        press and hold (or right-click) on any spot to drop a pin — the lat, lng numbers pop up at the bottom.
+        Copy them here and tap Set. This replaces "Use my location" with any place you choose.
+      </div>
+    </div>
+
+    <div class="search-row" style="display:flex; gap:8px;">
+      <input type="text" id="searchInput" placeholder="🔍 Search any hotel, cafe, hospital or restaurant by name…" style="flex:1;">
+      <button class="btn btn-primary" id="searchGoBtn" style="flex:0 0 auto;">Search</button>
+      <button class="btn btn-ghost" id="searchClearBtn" style="flex:0 0 auto; display:none;">✕</button>
+    </div>
+
+    <div class="spots" id="spotRow"></div>
+    <div class="spot-desc" id="spotDesc"></div>
+    <div class="evening-note" id="eveningNote">🌆 It's getting late in the day — showing hotels first so you can lock in tonight's stay.</div>
+    <div class="cats" id="catRow"></div>
+  </div>
+
+  <div class="stats" id="statsRow"></div>
+
+  <div class="list" id="list"></div>
+
+  <div class="note" id="washroomNote" style="display:none">
+    🚻 Verified public-washroom listings are rare on the map data source, so results here are limited.
+    Tap "Search live on Google Maps" below to find the closest public toilet to your current pin in real time.
+    <div style="margin-top:8px"><a class="btn btn-ghost" id="washroomSearchLink" target="_blank" rel="noopener" style="text-decoration:none; display:inline-block;">🔍 Search live on Google Maps</a></div>
+  </div>
+
+  <div class="note">
+    ℹ️ Free, open guide — no account needed. "Use my location" only asks your browser's built‑in location
+    permission (the same one Google Maps uses). Prefer not to share it? Use "Enter location manually" and paste
+    coordinates from Google Maps instead. Nothing is stored or shared either way.
+  </div>
+</div>
+
+<!-- ===================== TRIP PLANNER TAB ===================== -->
+<div id="tabPlan" style="display:none;">
+  <div class="panel" id="customizePanel">
+    <b style="font-family:'Inter',system-ui,sans-serif;">🛠️ Build your own Manipur trip</b>
+    <p style="font-size:0.85rem; color:var(--muted); margin:6px 0 10px; line-height:1.5;">
+      Choose how many days you actually have and which places you want to see — the route below
+      reorders itself by distance and rebuilds instantly. Leave it as-is to see a ready-made example plan instead.
+    </p>
+    <div class="coord-row" style="margin-top:0;">
+      <input type="number" id="dayCountInput" min="1" max="10" value="5" style="max-width:90px;">
+      <span style="font-size:0.85rem; color:var(--muted); align-self:center;">day(s) trip</span>
+    </div>
+    <div class="spot-check-grid" id="spotCheckGrid"></div>
+    <div class="coord-row">
+      <button class="btn btn-primary" id="generatePlanBtn" style="flex:1;">✨ Generate my plan</button>
+      <button class="btn btn-ghost" id="resetPlanBtn" style="flex:1;">↺ Reset to example plan</button>
+    </div>
+  </div>
+
+  <div id="planList"></div>
+  <div class="note">
+    🌙 Sunset in Manipur is roughly 5:00–5:45 PM most of the year. Plan to be at your last stop of the day
+    by 4:30 PM latest, and lock in a room before dusk — many rural roads (Loktak, Andro, Sekta) are unlit at night.
+  </div>
+</div>
+
+<!-- ===================== BUS ROUTES TAB ===================== -->
+<div id="tabBus" style="display:none;">
+  <div class="panel">
+    <b style="font-family:'Inter',system-ui,sans-serif; font-size:1.05rem;">One timetable for every bus out of Manipur</b>
+    <p style="font-size:0.85rem; color:var(--muted); margin:6px 0 12px; line-height:1.5;">
+      Manipur State Transport and private operators, side by side — departure, arrival, fare, and what to do
+      if you miss one.
+    </p>
+    <div class="coord-row" style="margin-top:0;">
+      <div style="flex:1;">
+        <label style="font-size:0.76rem; color:var(--muted); display:block; margin-bottom:4px;">From</label>
+        <select id="busFrom" style="width:100%; padding:9px 10px; border-radius:10px; border:1px solid var(--border); background:var(--bg); color:var(--text); font-size:0.85rem;">
+          <option value="Imphal">Imphal</option>
+        </select>
+      </div>
+      <div style="flex:1;">
+        <label style="font-size:0.76rem; color:var(--muted); display:block; margin-bottom:4px;">To</label>
+        <select id="busTo" style="width:100%; padding:9px 10px; border-radius:10px; border:1px solid var(--border); background:var(--bg); color:var(--text); font-size:0.85rem;"></select>
+      </div>
+    </div>
+    <button class="btn btn-primary" id="busSearchBtn" style="width:100%; margin-top:10px;">Search buses</button>
+    <p style="font-size:0.74rem; color:var(--muted); margin:8px 0 0;">
+      ⚠️ These are indicative/sample schedules, not a live feed — always confirm the fare and time at the
+      counter or with the operator before travelling; hill-road weather often causes delays.
+    </p>
+  </div>
+  <div id="busResults"></div>
+</div>
+
+<!-- ===================== FLIGHTS TAB ===================== -->
+<div id="tabFlights" style="display:none;">
+  <div class="panel">
+    <b style="font-family:'Inter',system-ui,sans-serif; font-size:1.05rem;">Flying instead of the bus?</b>
+    <p style="font-size:0.85rem; color:var(--muted); margin:6px 0 0; line-height:1.5;">
+      Book directly with the airline — this just points you to their official site, no booking happens here.
+    </p>
+  </div>
+  <div id="flightsList"></div>
+  <div class="note">
+    Nearest airport: Imphal International Airport (IMF). Both links leave Help Kit Manipur and go to the
+    airline's own website.
+  </div>
+</div>
+
+<!-- ===================== REVIEWS & SAFETY TAB ===================== -->
+<div id="tabReviews" style="display:none;">
+
+  <div class="panel">
+    <b style="font-family:'Inter',system-ui,sans-serif;">⚠️ Reviews &amp; Safety Reports</b>
+    <p style="font-size:0.85rem; color:var(--muted); margin:6px 0 10px; line-height:1.5;">
+      Read or leave a review for any tourist spot, hotel, cafe, restaurant, hospital or police station —
+      including flagging a safety concern (crisis, conflict, an accidental fight, or anything that felt unsafe)
+      so other travellers see it before they go.
+    </p>
+    <select id="reviewLocationSelect"></select>
+  </div>
+
+  <div class="panel" id="reviewSummaryPanel" style="display:none;"></div>
+
+  <!-- ---- Compulsory sign-in gate: must pass before posting a review or feedback ---- -->
+  <div class="panel" id="signInGatePanel">
+    <b style="font-size:0.9rem;">🔐 Sign in to Help Kit Manipur</b>
+    <p style="font-size:0.78rem; color:var(--muted); margin:6px 0 10px; line-height:1.4;">
+      Reading reviews below is always open to everyone. To post a rating or review — just like on the Play
+      Store — sign in first, so your name shows next to your comment instead of it being anonymous.
+    </p>
+    <div class="signin-options">
+      <button class="btn btn-primary" id="signInGoogleBtn" style="width:100%; margin-bottom:8px;">🔵 Continue with Google</button>
+      <button class="btn btn-ghost" id="signInMobileBtn" style="width:100%;">📱 Continue with Mobile Number</button>
+    </div>
+
+    <div id="googleSignInForm" style="display:none; margin-top:10px;">
+      <input type="text" id="googleNameInput" placeholder="Your name" style="width:100%; padding:9px 10px; border-radius:10px; border:1px solid var(--border); background:var(--bg); color:var(--text); font-size:0.85rem; margin-bottom:8px;">
+      <input type="email" id="googleEmailInput" placeholder="Google email" style="width:100%; padding:9px 10px; border-radius:10px; border:1px solid var(--border); background:var(--bg); color:var(--text); font-size:0.85rem; margin-bottom:8px;">
+      <button class="btn btn-primary" id="googleContinueBtn" style="width:100%;">Continue</button>
+      <div id="googleGateMsg" style="font-size:0.78rem; color:var(--muted); margin-top:6px;"></div>
+    </div>
+
+    <div id="mobileSignInForm" style="display:none; margin-top:10px;">
+      <input type="text" id="gateNameInput" placeholder="Your name" style="width:100%; padding:9px 10px; border-radius:10px; border:1px solid var(--border); background:var(--bg); color:var(--text); font-size:0.85rem; margin-bottom:8px;">
+      <input type="tel" id="gateMobileInput" placeholder="Mobile number (10 digits)" style="width:100%; padding:9px 10px; border-radius:10px; border:1px solid var(--border); background:var(--bg); color:var(--text); font-size:0.85rem; margin-bottom:8px;">
+      <button class="btn btn-primary" id="mobileContinueBtn" style="width:100%;">Continue</button>
+      <div id="mobileGateMsg" style="font-size:0.78rem; color:var(--muted); margin-top:6px;"></div>
+    </div>
+
+    <p style="font-size:0.72rem; color:var(--muted); margin-top:10px;">
+      For your privacy, we don't verify your email or number — it's only used to put your name on your review.
+      It's never stored or shown to anyone.
+    </p>
+  </div>
+
+  <div class="panel" id="signedInBadge" style="display:none;">
+    ✅ Posting as <b id="signedInName"></b> · <button class="a-copy" id="gateSignOutBtn">Switch / sign out</button>
+  </div>
+
+  <div class="panel" id="reviewFormPanel" style="display:none;">
+    <b style="font-size:0.9rem;">✍️ Add your review</b>
+    <div class="star-picker" id="starPicker">
+      <span data-v="1">★</span><span data-v="2">★</span><span data-v="3">★</span><span data-v="4">★</span><span data-v="5">★</span>
+    </div>
+    <textarea id="reviewText" rows="3" placeholder="Share your experience — crowd levels, cleanliness, how safe it felt, anything useful for other travellers…"></textarea>
+    <label class="safety-check">
+      <input type="checkbox" id="safetyCheck"> ⚠️ This report describes a safety concern (crisis, conflict, accidental fight, or similar incident)
+    </label>
+    <button class="btn btn-primary" id="submitReviewBtn" style="margin-top:10px; width:100%;">Post review</button>
+    <div id="reviewMsg" style="font-size:0.78rem; color:var(--muted); margin-top:6px;"></div>
+  </div>
+
+  <div class="list" id="reviewsList"></div>
+
+  <div class="panel" id="feedbackFormPanel" style="display:none;">
+    <b style="font-size:0.9rem;">💬 General feedback about this website</b>
+    <textarea id="siteFeedbackText" rows="3" placeholder="Bugs, ideas, missing places, anything — let us know…" style="margin-top:8px;"></textarea>
+    <button class="btn btn-ghost" id="submitSiteFeedbackBtn" style="margin-top:8px; width:100%;">Send feedback</button>
+    <div id="siteFeedbackMsg" style="font-size:0.78rem; color:var(--muted); margin-top:6px;"></div>
+  </div>
+
+  <div class="note" id="reviewsStorageNote">
+    🔄 Checking whether shared reviews are available…
+  </div>
+</div>
+
+<!-- ===================== SAFETY GUIDE TAB ===================== -->
+<div id="tabSafety" style="display:none;">
+  <div class="panel" style="border-left:4px solid #b4342a;">
+    <b style="font-size:1.05rem;">🛡️ Getting back safely after dark</b>
+    <p style="font-size:0.85rem; color:var(--muted); margin:6px 0 0; line-height:1.5;">
+      Built with women and solo travellers in mind, but useful for anyone moving around Manipur
+      after sunset. Quick emergency numbers, practical habits, and the nearest police station
+      and hospital to wherever you are right now.
+    </p>
+  </div>
+
+  <div class="panel">
+    <b style="font-size:0.9rem;">📞 Emergency numbers — tap to call</b>
+    <div class="safety-call-grid" id="safetyCallGrid"></div>
+  </div>
+
+  <div class="panel" style="border-left:4px solid #b4342a;">
+    <b style="font-size:0.9rem;">🆘 Share my live location with someone I trust</b>
+    <p style="font-size:0.78rem; color:var(--muted); margin:6px 0 10px; line-height:1.45;">
+      Saves a contact number only on this device. Tap the button, then send the message through
+      WhatsApp or SMS yourself — this site never sends anything on its own.
+    </p>
+    <input type="tel" id="sosContactInput" placeholder="Trusted contact number (10 digits)" style="width:100%; padding:9px 10px; border-radius:10px; border:1px solid var(--border); background:var(--bg); color:var(--text); font-size:0.85rem; margin-bottom:8px;">
+    <button class="btn btn-primary" id="sosBtn" style="width:100%; background:#b4342a;">📍 Get my location message</button>
+    <div id="sosOut" style="margin-top:10px; font-size:0.82rem; color:var(--muted);"></div>
+  </div>
+
+  <div class="panel">
+    <b style="font-size:0.9rem;">📍 Nearest right now</b>
+    <p style="font-size:0.78rem; color:var(--muted); margin:6px 0 10px;">
+      Uses your live location if it's on (turn it on from "Explore nearby" → "Use my location"),
+      otherwise shows the nearest to your selected tourist spot.
+    </p>
+    <div id="safetyNearbyBox"></div>
+  </div>
+
+  <div class="panel">
+    <b style="font-size:0.9rem;">✅ Before you head out after dark</b>
+    <ul class="safety-tips" id="safetyTipsList"></ul>
+  </div>
+
+  <div class="note">
+    ⚠️ This guide gives general precautions and real local emergency numbers, but it can't
+    assess your specific situation. If you feel unsafe right now, call <b>112</b> (or
+    <b>181</b> for the Manipur Women Helpline) immediately rather than relying on this page.
+  </div>
+</div>
+
+<!-- ===================== VISITOR INFO TAB ===================== -->
+<div id="tabVisitor" style="display:none;">
+  <div class="panel">
+    <b style="font-size:1.05rem;">🧳 Before you travel to Manipur</b>
+    <p style="font-size:0.82rem; color:var(--muted); margin:6px 0 0; line-height:1.5;">
+      Rules and event dates change. Treat this page as a starting checklist and confirm on the
+      official links before you book anything.
+    </p>
+  </div>
+
+  <div class="card" style="margin-top:14px;">
+    <h3>🪪 Inner Line Permit (ILP)</h3>
+    <p class="addr" style="line-height:1.55;">
+      Indian citizens who don't live in Manipur need an Inner Line Permit to enter. The state
+      issues a Temporary ILP for tourists and short-term visitors, valid for up to 30 days, and it
+      needs a government photo ID. You can apply online, and it's sensible to apply a few days
+      before you travel. Armed forces members and Manipur residents are exempt. Foreign nationals
+      follow separate rules, so check with the Manipur tourism department.
+    </p>
+    <div class="actions"><a class="a-map" href="https://manipurilponline.mn.gov.in/" target="_blank" rel="noopener">Open official ILP portal</a></div>
+  </div>
+
+  <div class="card" style="margin-top:12px;">
+    <h3>🎉 Festivals &amp; dates (2026)</h3>
+    <div id="festivalList" style="font-size:0.85rem; line-height:1.7;"></div>
+    <p class="addr" style="margin-top:8px;">Dates come from published government and news announcements — confirm closer to the day.</p>
+    <div class="actions"><a class="a-dir" href="https://manipurtourism.gov.in/" target="_blank" rel="noopener">Manipur Tourism (official)</a></div>
+  </div>
+
+  <div class="card" style="margin-top:12px;">
+    <h3>🌦️ Weather &amp; road conditions</h3>
+    <p class="addr" style="line-height:1.55;">
+      Hill roads can slow down or close in heavy rain, and many rural stretches are unlit after
+      dark. Check the forecast and local news before long drives, and keep buffer time for bus
+      and flight connections.
+    </p>
+    <div class="actions">
+      <a class="a-dir" href="https://www.google.com/search?q=Imphal+weather+today" target="_blank" rel="noopener">Imphal weather</a>
+      <a class="a-dir" href="https://manipurpolice.gov.in/" target="_blank" rel="noopener">Manipur Police notices</a>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:12px;">
+    <h3>🗓️ Best time to visit</h3>
+    <p class="addr" style="line-height:1.55;">
+      October to March is the usual sweet spot: cooler, drier, and festival season (the Sangai
+      Festival is in late November). Monsoon months bring heavy rain and slower roads.
+    </p>
+  </div>
+</div>
+
+<!-- ===================== LIST YOUR BUSINESS TAB ===================== -->
+<div id="tabBusiness" style="display:none;">
+  <div class="panel">
+    <b style="font-size:1.05rem;">🤝 List your business on Help Kit Manipur</b>
+    <p style="font-size:0.82rem; color:var(--muted); margin:6px 0 0; line-height:1.5;">
+      Hotel, homestay, café, restaurant, guide or taxi operator? Get in front of travellers
+      searching around Manipur's tourist spots.
+    </p>
+  </div>
+
+  <div class="card" style="margin-top:14px;">
+    <h3>📞 Contact</h3>
+    <p class="addr" style="line-height:1.55;"><b>Ojas Chourasia</b> — student, IIIT Manipur<br>Phone / WhatsApp: <b>+91 94257 05016</b><br>Email: <b>ojaschourasia@gmail.com</b></p>
+    <div class="actions">
+      <a class="a-map" href="tel:+919425705016">📞 Call</a>
+      <a class="a-dir" href="https://wa.me/919425705016?text=Hi%20Ojas%2C%20I%20want%20to%20list%20my%20business%20on%20Help%20Kit%20Manipur." target="_blank" rel="noopener">💬 WhatsApp</a>
+    </div>
+    <div class="actions">
+      <a class="a-dir" href="https://mail.google.com/mail/?view=cm&fs=1&to=ojaschourasia@gmail.com&su=List%20my%20business%20on%20Help%20Kit%20Manipur" target="_blank" rel="noopener">✉️ Open Gmail</a>
+      <a class="a-dir" href="mailto:ojaschourasia@gmail.com?subject=List%20my%20business%20on%20Help%20Kit%20Manipur">📧 Email app</a>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px;">
+    <h3>What's on offer</h3>
+    <ul class="safety-tips">
+      <li><b>Verified badge</b> — we confirm your details and mark your listing ✔ Verified.</li>
+      <li><b>Featured placement</b> — shown higher and marked "Sponsored" so travellers always know it's paid.</li>
+      <li><b>Direct enquiries</b> — travellers call or WhatsApp you from your listing.</li>
+    </ul>
+    <p class="addr">Pricing is agreed directly with you. Nothing is charged through this website.</p>
+  </div>
+
+  <div class="panel" style="margin-top:14px;">
+    <b style="font-size:0.9rem;">✔ Our tie-up partners</b>
+    <p style="font-size:0.78rem; color:var(--muted); margin:6px 0 8px;">Businesses that have a confirmed tie-up with Help Kit Manipur. Enquiries sent through the form below are private and are never shown here.</p>
+    <div id="partnersList"></div>
+  </div>
+
+  <div class="panel" id="bzGatePanel" style="margin-top:14px; border-left:4px solid var(--accent);">
+    <b style="font-size:0.9rem;">🔐 Sign up / sign in to list your business</b>
+    <p style="font-size:0.78rem; color:var(--muted); margin:6px 0 10px; line-height:1.4;">
+      Listing and tie-up enquiries need a quick sign-in first, so every enquiry comes with a name attached.
+      New here? The same steps sign you up.
+    </p>
+    <button class="btn btn-primary" id="bzGoogleBtn" style="width:100%; margin-bottom:8px;">🔵 Continue with Google</button>
+    <button class="btn btn-ghost" id="bzMobileBtn" style="width:100%;">📱 Continue with Mobile Number</button>
+    <div id="bzGoogleForm" style="display:none; margin-top:10px;">
+      <input type="text" id="bzGName" placeholder="Your name" style="width:100%; padding:9px 10px; border-radius:10px; border:1px solid var(--border); background:var(--bg); color:var(--text); font-size:0.85rem; margin-bottom:8px;">
+      <input type="email" id="bzGEmail" placeholder="Google email" style="width:100%; padding:9px 10px; border-radius:10px; border:1px solid var(--border); background:var(--bg); color:var(--text); font-size:0.85rem; margin-bottom:8px;">
+      <button class="btn btn-primary" id="bzGContinue" style="width:100%;">Continue</button>
+    </div>
+    <div id="bzMobileForm" style="display:none; margin-top:10px;">
+      <input type="text" id="bzMName" placeholder="Your name" style="width:100%; padding:9px 10px; border-radius:10px; border:1px solid var(--border); background:var(--bg); color:var(--text); font-size:0.85rem; margin-bottom:8px;">
+      <input type="tel" id="bzMNum" placeholder="Mobile number (10 digits)" style="width:100%; padding:9px 10px; border-radius:10px; border:1px solid var(--border); background:var(--bg); color:var(--text); font-size:0.85rem; margin-bottom:8px;">
+      <button class="btn btn-primary" id="bzMContinue" style="width:100%;">Continue</button>
+    </div>
+    <div id="bzGateMsg" style="font-size:0.78rem; color:var(--muted); margin-top:6px;"></div>
+    <p style="font-size:0.72rem; color:var(--muted); margin-top:8px;">We don't verify your email or number — they are only checked for format and are never stored or shown. This stops anonymous enquiries; it isn't identity verification.</p>
+  </div>
+
+  <div class="panel" id="bzSignedIn" style="display:none; margin-top:14px;">
+    ✅ Signed in as <b id="bzSignedName"></b> · <button class="a-copy" id="bzSignOut">Switch / sign out</button>
+  </div>
+
+  <div id="bizFormWrap" style="display:none;">
+  <div class="panel" style="margin-top:14px;">
+    <b style="font-size:0.9rem;">Send us your details</b>
+    <input type="text" id="bizName" placeholder="Business name" class="biz-input">
+    <select id="bizCat" class="biz-input">
+      <option>Hotel / homestay</option><option>Restaurant / café</option><option>Hospital / clinic</option>
+      <option>Taxi / driver</option><option>Tour guide / agency</option><option>Other</option>
+    </select>
+    <input type="text" id="bizArea" placeholder="Area (e.g. Thangmeiband, Moirang)" class="biz-input">
+    <input type="tel" id="bizPhone" placeholder="Your phone / WhatsApp number" class="biz-input">
+    <textarea id="bizMsg" rows="3" placeholder="Anything else we should know?" class="biz-input"></textarea>
+    <button class="btn btn-primary" id="bizSendBtn" style="width:100%;">Prepare my enquiry</button>
+    <div id="bizOut" style="margin-top:10px; font-size:0.82rem; color:var(--muted); line-height:1.5;"></div>
+  </div>
+  </div>
+
+  <div class="card" style="margin-top:14px;">
+    <h3>📞 Contact us</h3>
+    <p class="addr" style="line-height:1.55;"><b>Ojas Chourasia</b> — student, IIIT Manipur<br>Phone / WhatsApp: <b>+91 94257 05016</b><br>Email: <b>ojaschourasia@gmail.com</b></p>
+    <div class="actions">
+      <a class="a-map" href="tel:+919425705016">📞 Call</a>
+      <a class="a-dir" href="https://wa.me/919425705016" target="_blank" rel="noopener">💬 WhatsApp</a>
+    </div>
+    <div class="actions">
+      <a class="a-dir" href="https://mail.google.com/mail/?view=cm&fs=1&to=ojaschourasia@gmail.com" target="_blank" rel="noopener">✉️ Open Gmail</a>
+      <a class="a-dir" href="mailto:ojaschourasia@gmail.com">📧 Email app</a>
+    </div>
+  </div>
+</div>
+
+<footer>Made for travellers exploring Manipur • Data via Google Places</footer>
+</div>
+
+<script src="/js/data.js"></script>
+<script src="/js/app.js"></script>
+</body>
+</html>
