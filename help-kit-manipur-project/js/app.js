@@ -1,7 +1,31 @@
+const SPREADSHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTdCApFwYJvgd3DqJ4bq-HyW9lANsWJt0yu3jBdDuYn0l6UaixqjFrbf-VXonRxkS8qjS7uy14YFzZ6/pub?gid=0&single=true&output=csv";
+
+
+
 let userLoc = null;
 let activeSpot = TOURIST_SPOTS[0];
 let activeCat = 'hotel';
 let searchTerm = '';
+async function fetchSpreadsheetData() {
+try {
+const response = await fetch(SPREADSHEET_CSV_URL);
+const csvText = await response.text();
+const lines = csvText.split("\n");
+const headers = lines[0].split(",");
+const result = [];
+for (let i = 1; i < lines.length; i++) {
+if (!lines[i].trim()) continue;
+const currentLine = lines[i].split(",");
+const rowObject = {};
+headers.forEach((header, index) => {
+rowObject[header.trim()] = currentLine[index]?.trim();
+});
+result.push(rowObject);
+}
+TOURIST_SPOTS = result;
+} catch (e) { console.log(e); }
+}
+window.addEventListener('DOMContentLoaded', fetchSpreadsheetData);
 
 function haversine(lat1,lon1,lat2,lon2){
   const R=6371;
